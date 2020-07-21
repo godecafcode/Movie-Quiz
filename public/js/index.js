@@ -1,15 +1,6 @@
-
-
 document.addEventListener('DOMContentLoaded', renderQuote);
 
-window.history.pushState({}, document.title, "/");
-
-// set level
-let level = 1;
-let triesLeft = 3;
-let hintsLeft = 3;
-
-const answers = [(correct = []), (wrong = [])];
+window.history.pushState({}, document.title, '/');
 
 const movieQuotes = [
   {
@@ -33,9 +24,25 @@ const movieQuotes = [
   {
     image: '/images/rick-and-morty-3.png',
     show: 'Rick and Morty',
-    quote: 'That\'s planning for failure, Morty. Even dumber than regular planning.',
+    quote: "That's planning for failure, Morty. Even dumber than regular planning.",
+  },
+
+  {
+  image: '/images/jaws.jpg',
+  show: 'Jaws',
+  quote: "You're gonna need a bigger boat",
   },
 ];
+
+// set variables
+let level = 1;
+let stage = 0;
+let triesLeft = 3;
+let hintsLeft = 3;
+
+
+// display both correct and wrong answer when game finish
+const answers = [(correct = []), (wrong = [])];
 
 function renderQuote() {
   // Get UI Elements
@@ -56,14 +63,19 @@ function renderQuote() {
 document.querySelector('.form').addEventListener('submit', compare);
 
 function compare(e) {
+    // get current quote
+    let currentQuote = movieQuotes[`${level - 1}`].quote;
+
   const userAnswer = document.getElementById('answer').value;
 
+  console.log(`${bareCompare(userAnswer)} ${bareCompare(currentQuote)}`)
+
   if (triesLeft > 0) {
-    if (bareCompare(userAnswer) === bareCompare(movieQuotes[`${level - 1}`].quote)) {
-      answers[0].push(`${movieQuotes[`${level - 1}`].show}: ${movieQuotes[`${level - 1}`].quote}`);
+    if (bareCompare(userAnswer) === bareCompare(currentQuote)) {
+      answers[0].push(`${movieQuotes[`${level - 1}`].show}: ${currentQuote}`);
       proceed('correct');
     } else {
-      answers[1].push(`${movieQuotes[`${level - 1}`].show}: ${movieQuotes[`${level - 1}`].quote}`);
+      answers[1].push(`${movieQuotes[`${level - 1}`].show}: ${currentQuote}`);
       proceed('wrong');
     }
   } else {
@@ -76,12 +88,14 @@ function compare(e) {
 
 function proceed(typeOfAnswer) {
   level += 1;
+  stage += 1;
   disableButton();
 
   if (typeOfAnswer === 'correct') {
     alertMessage('Correct!', 'correct');
     document.getElementById('quote-censored').remove();
   } else {
+    triesLeft -= 1;
     alertMessage(`Wrong answer, ${triesLeft} tries left.`, 'wrong');
   }
 
@@ -89,8 +103,6 @@ function proceed(typeOfAnswer) {
     renderQuote();
     clearField();
     addCensored();
-
-
   }, 2000);
 }
 
@@ -118,10 +130,12 @@ function clearField() {
 function changeButton(message, className) {
   const submit = document.getElementById('submit-btn');
 
-  submit.firstElementChild.remove();
-  submit.append(document.createTextNode(message));
-  submit.id = '';
-  submit.className = `misc-button ${className}`;
+  if (submit.firstElementChild) {
+    submit.firstElementChild.remove();
+    submit.append(document.createTextNode(message));
+    submit.className = `misc-button ${className}`;
+    `${className}`=== 'retry' ? qRestart() : console.log('Completed');
+}
 }
 
 function disableButton() {
@@ -155,16 +169,38 @@ function revealAnswers() {
 }
 
 // get hint
-document.getElementById('hint-btn').addEventListener('click', function (e) {
-  if (hintsLeft > 0) {
-    hintsLeft -= 1;
-    const quote = movieQuotes[level - 1].quote.split(' ');
-    const hint = quote[0];
-    console.log(hint);
+let whichHint = 0;
 
-    document.getElementById('answer').value = hint;
+
+document.getElementById('hint-btn').addEventListener('click', function (e) {
+  // assign quote and compare previous to new quote down below
+  let hintQuote = movieQuotes[`${level - 1}`].quote;
+
+  if (stage === level - 1) {
+    if (hintsLeft > 0) {
+      hintsLeft -= 1;
+      let quote = hintQuote.split(' ');
+      let hint = quote[whichHint];
+      whichHint += 1;
+
+      document.getElementById('answer').value += `${hint} `;
+    } else {
+      alertMessage('No hints left!', 'wrong');
+    }
   } else {
-    alert('No hints left!');
+    let whichHint = 0;
+    stage += 1;
+
+    if (stage === level - 1) {
+      if (hintsLeft > 0) {
+        hintsLeft -= 1;
+        let quote = hintQuote.split(' ');
+        let hint = quote[whichHint];
+        whichHint += 1;
+
+        document.getElementById('answer').value += `${hint} `;
+      }
+    }
   }
 
   e.preventDefault();
@@ -176,19 +212,36 @@ function bareCompare(string) {
   let illegalCharacters = [',', "'"];
 
   let bareString;
-  illegalCharacters.forEach(function(character) {
-    if(string.indexOf(character !== -1)) {
-      bareString = string.replace(/[^a-zA-Z ]/g, "");
+  illegalCharacters.forEach(function (character) {
+    if (string.indexOf(character !== -1)) {
+      bareString = string.replace(/[^a-zA-Z ]/g, '');
     }
-  })
+  });
 
   return bareString.toLowerCase();
 }
 
 function addCensored() {
-    // finslipa sen
-    const imageContainer = document.querySelector('.image-container');
-    const censored = document.createElement('div');
-    censored.id = 'quote-censored';
-    imageContainer.appendChild(censored);
+  // finslipa sen
+  const imageContainer = document.querySelector('.image-container');
+  const censored = document.createElement('div');
+  censored.id = 'quote-censored';
+  imageContainer.appendChild(censored);
 }
+
+if (document.querySelector('.retry')) {
+  document.querySelector('.retry').addEventListener('click', function () {
+    location.reload();
+  });
+}
+
+function qRestart() {
+  if (document.querySelector('.retry')) {
+    document.querySelector('.retry').addEventListener('click', function () {
+      location.reload();
+    });
+  } else {
+    console.log('test');
+  }
+}
+
