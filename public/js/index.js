@@ -68,8 +68,6 @@ function compare(e) {
 
   const userAnswer = document.getElementById('answer').value;
 
-  console.log(`${bareCompare(userAnswer)} ${bareCompare(currentQuote)}`)
-
   if (triesLeft > 0) {
     if (bareCompare(userAnswer) === bareCompare(currentQuote)) {
       answers[0].push(`${movieQuotes[`${level - 1}`].show}: ${currentQuote}`);
@@ -88,7 +86,7 @@ function compare(e) {
 
 function proceed(typeOfAnswer) {
   level += 1;
-  stage += 1;
+  // stage += 1;
   disableButton();
 
   if (typeOfAnswer === 'correct') {
@@ -134,7 +132,7 @@ function changeButton(message, className) {
     submit.firstElementChild.remove();
     submit.append(document.createTextNode(message));
     submit.className = `misc-button ${className}`;
-    `${className}`=== 'retry' ? qRestart() : console.log('Completed');
+    `${className}`=== 'retry' ? qRestart() : console.log('Something went wrong inside changeButton() at line 137');
 }
 }
 
@@ -188,8 +186,8 @@ document.getElementById('hint-btn').addEventListener('click', function (e) {
       alertMessage('No hints left!', 'wrong');
     }
   } else {
-    let whichHint = 0;
-    stage += 1;
+    whichHint = 0;
+    stage = level - 1;
 
     if (stage === level - 1) {
       if (hintsLeft > 0) {
@@ -240,8 +238,6 @@ function qRestart() {
     document.querySelector('.retry').addEventListener('click', function () {
       location.reload();
     });
-  } else {
-    console.log('test');
-  }
+  } 
 }
 
