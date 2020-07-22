@@ -34,6 +34,7 @@ const movieQuotes = [
   },
 ];
 
+
 // set variables
 let level = 1;
 let stage = 0;
@@ -132,8 +133,10 @@ function changeButton(message, className) {
     submit.firstElementChild.remove();
     submit.append(document.createTextNode(message));
     submit.className = `misc-button ${className}`;
-    `${className}`=== 'retry' ? qRestart() : console.log('Something went wrong inside changeButton() at line 137');
-}
+    if(`${className}`=== 'retry') {
+      qRestart()
+    }
+  }
 }
 
 function disableButton() {
@@ -221,11 +224,13 @@ function bareCompare(string) {
 
 function addCensored() {
   // finslipa sen
-  const imageContainer = document.querySelector('.image-container');
-  const censored = document.createElement('div');
-  censored.id = 'quote-censored';
-  imageContainer.appendChild(censored);
-}
+  if(! document.getElementById('quote-censored')) {
+    const imageContainer = document.querySelector('.image-container');
+    const censored = document.createElement('div');
+    censored.id = 'quote-censored';
+    imageContainer.appendChild(censored);    
+  }
+};
 
 if (document.querySelector('.retry')) {
   document.querySelector('.retry').addEventListener('click', function () {
