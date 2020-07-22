@@ -28,19 +28,17 @@ const movieQuotes = [
   },
 
   {
-  image: '/images/jaws.jpg',
-  show: 'Jaws',
-  quote: "You're gonna need a bigger boat",
+    image: '/images/jaws.jpg',
+    show: 'Jaws',
+    quote: "You're gonna need a bigger boat",
   },
 ];
-
 
 // set variables
 let level = 1;
 let stage = 0;
 let triesLeft = 3;
 let hintsLeft = 3;
-
 
 // display both correct and wrong answer when game finish
 const answers = [(correct = []), (wrong = [])];
@@ -64,28 +62,34 @@ function renderQuote() {
 document.querySelector('.form').addEventListener('submit', compare);
 
 function compare(e) {
+  if (movieQuotes[`${level - 1}`] !== undefined) {
     // get current quote
     let currentQuote = movieQuotes[`${level - 1}`].quote;
 
-  const userAnswer = document.getElementById('answer').value;
+    const userAnswer = document.getElementById('answer').value;
 
-  if (triesLeft > 0) {
-    if (bareCompare(userAnswer) === bareCompare(currentQuote)) {
-      answers[0].push(`${movieQuotes[`${level - 1}`].show}: ${currentQuote}`);
-      proceed('correct');
+    if (triesLeft > 1) {
+      if (bareCompare(userAnswer) === bareCompare(currentQuote)) {
+        answers[0].push(`${movieQuotes[`${level - 1}`].show}: ${currentQuote}`);
+        proceed('correct');
+      } else {
+        answers[1].push(`${movieQuotes[`${level - 1}`].show}: ${currentQuote}`);
+        proceed('wrong');
+      }
     } else {
-      answers[1].push(`${movieQuotes[`${level - 1}`].show}: ${currentQuote}`);
-      proceed('wrong');
+      changeButton('Retry', 'retry');
+      alertMessage(`Out of tries! What a bummer..`, 'wrong');
     }
   } else {
-    changeButton('Retry', 'retry');
-    alertMessage(`Out of tries!, what a bummer..`, 'wrong');
+    location.reload();
   }
 
   e.preventDefault();
 }
 
 function proceed(typeOfAnswer) {
+  let tries;
+
   level += 1;
   // stage += 1;
   disableButton();
@@ -95,7 +99,14 @@ function proceed(typeOfAnswer) {
     document.getElementById('quote-censored').remove();
   } else {
     triesLeft -= 1;
-    alertMessage(`Wrong answer, ${triesLeft} tries left.`, 'wrong');
+    if(triesLeft > 1 || triesLeft < 1) {
+      tries = 'tries';
+    } else {
+      tries = 'try'
+    };
+    let turnaryTries = (triesLeft > 0) ? `Wrong answer, ${triesLeft} ${tries} left.` : 'Last try';
+    alertMessage(turnaryTries, 'wrong')
+
   }
 
   setTimeout(() => {
@@ -133,8 +144,8 @@ function changeButton(message, className) {
     submit.firstElementChild.remove();
     submit.append(document.createTextNode(message));
     submit.className = `misc-button ${className}`;
-    if(`${className}`=== 'retry') {
-      qRestart()
+    if (`${className}` === 'retry') {
+      qRestart();
     }
   }
 }
@@ -171,7 +182,6 @@ function revealAnswers() {
 
 // get hint
 let whichHint = 0;
-
 
 document.getElementById('hint-btn').addEventListener('click', function (e) {
   // assign quote and compare previous to new quote down below
@@ -224,13 +234,13 @@ function bareCompare(string) {
 
 function addCensored() {
   // finslipa sen
-  if(! document.getElementById('quote-censored')) {
+  if (!document.getElementById('quote-censored')) {
     const imageContainer = document.querySelector('.image-container');
     const censored = document.createElement('div');
     censored.id = 'quote-censored';
-    imageContainer.appendChild(censored);    
+    imageContainer.appendChild(censored);
   }
-};
+}
 
 if (document.querySelector('.retry')) {
   document.querySelector('.retry').addEventListener('click', function () {
@@ -243,5 +253,5 @@ function qRestart() {
     document.querySelector('.retry').addEventListener('click', function () {
       location.reload();
     });
-  } 
+  }
 }
