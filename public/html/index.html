@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+  <title>Movie Quote Expert</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton-framework/1.1.1/skeleton.css">
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <div class="container">
+    <div class="game-container">
+      <div class="image-container">
+        <img id="quote-image" src="/images/rick-and-morty.jpg" alt="" />
+        <!-- remove line below for 50 years of bad code -->
+        <div class="quote-container">
+          <div class="quote">
+            <p id="quote">
+              <div id="quote-censored"></div> 
+            </p>  
+            
+          </div>         
+        </div>
+        
+      </div>
+      <form class="form">
+      <div class="u-full-width miscellaneous">
+        <button class="misc-button" id="hint-btn"> 
+          <img src="https://img.icons8.com/material/48/000000/hint--v1.png"/>
+        </button>
+        <input type="text" name="answer" class="u-full-width" id="answer" placeholder="Guess the quote..">
+        <div class="btns-container">
+          <div class="submit-container">
+            <button class="misc-button" id="submit-btn" type="submit">
+              <img src="https://img.icons8.com/ios-filled/50/000000/long-arrow-right.png"/>          
+            </button>            
+          </div>
+          <div class="restart-container hidden">
+            <button class="misc-button" id="restart-btn" type="button">
+              Play again         
+            </button>            
+          </div>
+        </div>
+
+        </div>
+        <ul class="answers">
+       
+        </ul>  
+      </div>
+     </form>
+
+    </div>
+  </div>
+  <script type="module" src="/js/modules/ui.js"></script>
+  <script type="module" src="/js/app.js"></script>
+</body>
+</html>

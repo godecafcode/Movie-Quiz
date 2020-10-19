@@ -2,10 +2,10 @@
   "name": "movie-quote-game",
   "version": "1.0.0",
   "description": "Movie quote guessing game with vanilla JavaScript and server-side",
-  "main": "app.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js"
+    "start": "node server.js"
   },
   "author": "Maximilian Olson",
   "license": "ISC",
