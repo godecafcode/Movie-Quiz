@@ -82,6 +82,7 @@ button {
 
 .image-container img {
   width: 100%;
+  max-height: 575px;
   border: 1px solid #eee;
   border-radius: 5px 5px 0px 0px;
   z-index: -1;
