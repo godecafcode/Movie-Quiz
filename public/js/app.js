@@ -49,12 +49,8 @@ const answers = {
 };
 
 function initShuffle() {
-  new Promise((resolve, reject) => {
-    resolve(randomize(movieQuotes));
-  }).then(quotes => {
-    movieQuotes = quotes;
-    updateQuote();
-  });
+  movieQuotes = randomize(movieQuotes);
+  updateQuote();
 }
 
 function updateQuote() {

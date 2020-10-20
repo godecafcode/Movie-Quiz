@@ -32,7 +32,8 @@ button {
 
 /* dynamicly added classes */
 .correct,
-.wrong {
+.wrong,
+.finish {
   font-family: Arial, Helvetica, sans-serif;
   padding: 5px;
   font-size: 16px;
